@@ -396,8 +396,8 @@ class MotorReglas:
             if any(self._coincide_patron(campo_busqueda, palabra, modo) for palabra in regla['palabras']):
                 return (regla['carpeta'], regla['prioridad'])
         
-        # 6. Clasificación por defecto
-        return ("General", 0)
+        # 6. Clasificación por defecto - None para que el correo se quede en bandeja de entrada
+        return (None, 0)
     
     def esta_en_lista_blanca(self, remitente: str) -> bool:
         """Verifica si un remitente está en la lista blanca"""

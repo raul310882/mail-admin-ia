@@ -487,7 +487,8 @@ class InterfazClasificadorCorreos:
                         correo = self.lote_actual[index]
                         carpeta_destino = correo['clasificacion']
                         
-                        if self.mover_correo(correo['mensaje'], carpeta_destino):
+                        # Solo mover si hay una clasificación válida (no None)
+                        if carpeta_destino and self.mover_correo(correo['mensaje'], carpeta_destino):
                             movidos += 1
                             # Aprender de esta acción
                             self.motor_reglas.guardar_regla_aprendida(
