@@ -247,12 +247,15 @@ class InterfazClasificadorCorreos:
                 # Formatear fecha
                 fecha_str = correo['fecha'].strftime('%d/%m %H:%M') if correo['fecha'] else 'N/A'
                 
+                # Mostrar "Sin clasificar" cuando la clasificación es None
+                clasificacion_mostrar = correo['clasificacion'] if correo['clasificacion'] else 'Sin clasificar'
+                
                 # Insertar en treeview (iid=str(i) para recuperar índice en clicks)
                 item = self.tree.insert('', 'end', iid=str(i), values=(
                     '☐',  # Checkbox vacío
                     correo['remitente'][:30] + '...' if len(correo['remitente']) > 30 else correo['remitente'],
                     correo['asunto'][:40] + '...' if len(correo['asunto']) > 40 else correo['asunto'],
-                    correo['clasificacion'],
+                    clasificacion_mostrar,
                     fecha_str
                 ))
                 self.seleccionados[i] = False
@@ -368,7 +371,11 @@ class InterfazClasificadorCorreos:
                 width=40,
                 state='readonly'
             )
-            clasificacion_combo.set(clasificacion_actual)
+            # Si clasificación es None, no seleccionar nada; si es válida, seleccionarla
+            if clasificacion_actual and clasificacion_actual in self.carpetas_disponibles:
+                clasificacion_combo.set(clasificacion_actual)
+            elif self.carpetas_disponibles:
+                clasificacion_combo.set('')  # No seleccionar nada, permitir al usuario elegir
             clasificacion_combo.pack(fill=tk.X, pady=(5, 20))
             
             # Mostrar sugerencias de asuntos similares si existen
