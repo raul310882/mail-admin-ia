@@ -229,11 +229,7 @@ class InterfazClasificadorCorreos:
             self.actualizar_estado("Cargando correos...")
             self.lote_actual = self.procesador.obtener_lote_correos(self.indice_lote)
             
-            if not self.lote_actual:
-                messagebox.showinfo("Información", "No hay correos no leídos para procesar")
-                return
-            
-            # Limpiar treeview
+            # Limpiar treeview (antes de verificar si hay correos)
             for item in self.tree.get_children():
                 self.tree.delete(item)
 
@@ -241,6 +237,10 @@ class InterfazClasificadorCorreos:
             self.seleccionados = {}
             self.todos_seleccionados = False
             self.tree.heading('Seleccionar', text='☐', command=self.toggle_seleccionar_todos)
+            
+            if not self.lote_actual:
+                messagebox.showinfo("Información", "No hay correos no leídos para procesar")
+                return
             
             # Agregar correos al treeview
             for i, correo in enumerate(self.lote_actual):
